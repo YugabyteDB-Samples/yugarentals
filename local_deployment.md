@@ -2,14 +2,22 @@
 
 Follow this instruction if you wish to run the application components locally without Docker.
 
+Users have the option to connect these services to YugabyteDB or Oracle Database.
+
+These database deployments can be hosted in the cloud, with [YugabyteDB Managed](https://www.yugabyte.com/managed/) for YugabyteDB or any other cloud provider for Oracle Database. Alternatively, [YugabyteDB](https://docs.yugabyte.com/preview/quick-start/) or Oracle Database can be installed locally.
+
 <!-- vscode-markdown-toc -->
 
 - [Local Application Deployment](#local-application-deployment)
   - [Prerequisites](#prerequisites)
   - [Architecture](#architecture)
   - [Configure Your Environment](#configure-your-environment)
+    - [Configuration for YugabyteDB](#configuration-for-yugabytedb)
+    - [Configuration for Oracle Database](#configuration-for-oracle-database)
+  - [Seed Your Database](#seed-your-database)
+    - [Seed YugabyteDB](#seed-yugabytedb)
+    - [Seed Oracle Database](#seed-oracle-database)
   - [Run Application Services](#run-application-services)
-  - [Seed Database](#seed-database)
   - [Viewing The UI](#viewing-the-ui)
 
 <!-- vscode-markdown-toc-config
@@ -20,9 +28,16 @@ Follow this instruction if you wish to run the application components locally wi
 
 ## Prerequisites
 
-- Ensure your system is equipped to run JavaScript applications with Node.js v16.
+1. Ensure your system is equipped to run JavaScript applications with Node.js v16.
 
-* if you're running on Oracle, be sure to download and configure the [Oracle Instant Client](https://www.oracle.com/database/technologies/instant-client) for your platform.
+2. if you're running on Oracle, be sure to download and configure the [Oracle Instant Client](https://www.oracle.com/database/technologies/instant-client.html) for your platform.
+
+Oracle Database is not supported on machines running Apple ARM. To install the Oracle Client Libraries on Apple ARM:
+
+1. Install [Rosetta](https://support.apple.com/en-us/HT211861).
+2. Use Rosetta to install dependencies, following [these steps](https://developers.ascendcorp.com/how-to-install-oracle-instant-client-on-apple-silicon-m1-24b67f2dc743).
+3. Verify the developer, following [these steps](http://oraontap.blogspot.com/2020/01/mac-os-x-catalina-and-oracle-instant.html).
+4. Install Node.js v16 inside terminal running Rosetta.
 
 ## Architecture
 
@@ -32,63 +47,136 @@ Follow this instruction if you wish to run the application components locally wi
 
 ## Configure Your Environment
 
-YugaRentals uses the [Dotenv](https://www.npmjs.com/package/dotenv) package to configure its application environment.
+### Configuration for YugabyteDB
 
-1. Install the server dependencies
+1. Clone the repository
+
+```
+git clone https://github.com/YugabyteDB-Samples/yugarentals.git
+cd yugarentals/
+```
+
+2. Install the server dependencies
 
 ```
 > cd server/ && npm install
 ```
 
-2. Edit your database connection details in `/api/.env`.
-3. Install the client dependencies
+3. Edit your database connection details.
+
+YugaRentals uses the [Dotenv](https://www.npmjs.com/package/dotenv) package to configure it's application environment.
+
+Update the environment variables in `/server/.env` to match your deployment.
+
+```
+# YugabyteDB Environment
+
+DB_TYPE=yugabyte
+DB_USER=admin
+DB_HOST=my-yugabytedb-managed-host
+DB_PASSWORD=password
+DB_NAME=yugabyte
+```
+
+If running on YugabyteDB Managed, provide the downloaded root certificate in the `/server` directory as `root.crt`.
+
+4. Install the client dependencies
 
 ```
 > cd client/ && npm install
 ```
 
-4. Build the UI
+5. Build the UI
 
 ```
 > npm run build
 ```
 
-## Run Application Services
+### Configuration for Oracle Database
 
-This application runs locally via a Node.js server.
-
-Users have the option to connect these services to YugabyteDB or Oracle Database.
-
-These database deployments can be hosted in the cloud, with [YugabyteDB Managed](https://www.yugabyte.com/managed/) for YugabyteDB or any other cloud provider for Oracle Database. Alternatively, [YugabyteDB](https://docs.yugabyte.com/preview/quick-start/) or Oracle Database can be installed locally.
-
-If running on YugabyteDB Managed, provide the downloaded root certificate in the `/server` directory as `root.crt`.
-
-Start the application
+1. Clone the repository
 
 ```
-> cd api/ && node index.js
+git clone https://github.com/YugabyteDB-Samples/yugarentals.git
+cd yugarentals/
 ```
 
-To enable auto-reload on file changes in developement using [Nodemon](https://www.npmjs.com/package/nodemon), you may alternatively start the application using
+2. Install the server dependencies
 
 ```
-> cd api/ && npm start
+> cd server/ && npm install
 ```
 
-## Seed Database
+3. Edit your database connection details.
 
-1. Find the schema and data files in `/api/schema` and `/api/data`.
-2. Install the appropriate command-line utility for your database. For YugabyteDB, install [ysqlsh](https://docs.yugabyte.com/preview/admin/ysqlsh) and for Oracle Database, install [Oracle Instant Client](https://www.oracle.com/database/technologies/instant-client) and the associated SQL\*Plus utility.
+YugaRentals uses the [Dotenv](https://www.npmjs.com/package/dotenv) package to configure it's application environment.
+
+Update the environment variables in `/server/.env` to match your deployment.
+
+```
+# Oracle environment
+
+DB_TYPE=oracle
+DB_USER=admin
+DB_PASSWORD=admin123
+DB_CONNECTION_STRING=mymachine.example.com/ORCL
+DB_CLIENT_PATH=/path/to/oracleinstantclient
+```
+
+4. Install the client dependencies
+
+```
+> cd client/ && npm install
+// Install node-oracledb package
+> npm install oracledb
+```
+
+5. Build the UI
+
+```
+> npm run build
+```
+
+## Seed Your Databse
+
+### Seed YugabyteDB
+
+1. Find the schema and data files in the `sql_scripts/yugabyte` directory.
+2. Install the appropriate command-line utility for your database. For YugabyteDB, install [ysqlsh](https://docs.yugabyte.com/preview/admin/ysqlsh).
 3. Execute the files.
 
 ```
 # Yugabyte
 > ysqlsh -h 127.0.0.1 -p 5433 -U yugabyte -f sql_scripts/schema.sql
 > ysqlsh -h 127.0.0.1 -p 5433 -U yugabyte -f sql_scripts/data.sql
+```
 
+### Seed Oracle Database
+
+1. Find the schema and data files in the `sql_scripts/oracle` directory.
+2. Install the appropriate command-line utility for your database. For Oracle Database, install [Oracle Instant Client](https://www.oracle.com/database/technologies/instant-client) and the associated SQL\*Plus utility.
+3. Execute the files.
+
+```
 # SQL
 > SQL > @/full/path/to/sql_scripts/oracle/schema.sql
 > SQL > @/full/path/to/sql_scripts/oracle/data.sql
+```
+
+## Run Application Services
+
+This application runs locally via a Node.js server.
+
+Start the application
+
+```
+> cd server/ && node index.js
+```
+
+To enable auto-reload on file changes in developement using [Nodemon](https://www.npmjs.com/package/nodemon), you may alternatively start the application using
+
+```
+> cd server/ && npm start
 ```
 
 ## Viewing the UI

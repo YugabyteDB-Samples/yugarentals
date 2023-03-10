@@ -40,21 +40,35 @@ YugabyteDB deployments can be hosted in the cloud, with [YugabyteDB Managed](htt
 
 This is a self-contained deployment, which doesn't require any additional configuration.
 
-1. Start the application:
+1. Clone the repository
+
+```
+git clone https://github.com/YugabyteDB-Samples/yugarentals.git
+cd yugarentals/
+```
+
+2. Start the application:
 
 ```
 docker compose -f docker-compose-local.yaml up
 ```
 
-2. View the YugabyteDB UI Console at [localhost:7001](http://localhost:7001).
+3. View the YugabyteDB UI Console at [localhost:7001](http://localhost:7001).
 
 <img width="1584" alt="Screen Shot 2022-11-02 at 7 36 17 PM" src="https://user-images.githubusercontent.com/2041330/199637751-616d19ff-e474-4d17-956c-fe672c53052c.png">
 
 #### **Running on YugabyteDB Managed or Custom YugabyteDB Deployment**
 
-1. Open the `docker-compose.yaml` file and provide the connection details via the `DB_` settings.
+1. Clone the repository
 
-2. Start the application:
+```
+git clone https://github.com/YugabyteDB-Samples/yugarentals.git
+cd yugarentals/
+```
+
+2. Open the `docker-compose.yaml` file and provide the connection details via the `DB_` settings.
+
+3. Start the application:
 
 ```
 docker compose -f docker-compose.yaml up
