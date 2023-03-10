@@ -32,7 +32,7 @@ Follow this instruction if you wish to run the application components locally wi
 
 ## Configure Your Environment
 
-YugaRentals uses the [Dotenv](https://www.npmjs.com/package/dotenv) package configure it's application environment.
+YugaRentals uses the [Dotenv](https://www.npmjs.com/package/dotenv) package to configure its application environment.
 
 1. Install the server dependencies
 
