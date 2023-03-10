@@ -118,8 +118,9 @@ Update the environment variables in `/server/.env` to match your deployment.
 
 DB_TYPE=oracle
 DB_USER=admin
+DB_HOST=mymachine.example.com
 DB_PASSWORD=admin123
-DB_CONNECTION_STRING=mymachine.example.com/ORCL
+DB_NAME=ORCL
 DB_CLIENT_PATH=/path/to/oracleinstantclient
 ```
 

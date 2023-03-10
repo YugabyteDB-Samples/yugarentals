@@ -12,7 +12,6 @@ const {
   DB_HOST,
   DB_USER,
   DB_PASSWORD,
-  DB_CONNECTION_STRING,
   DB_NAME,
   ORACLE_CLIENT_LIB_PATH,
 } = process.env;
@@ -44,7 +43,7 @@ async function run() {
       connection = await oracledb.getConnection({
         user: DB_USER,
         password: DB_PASSWORD,
-        connectionString: DB_CONNECTION_STRING,
+        connectionString: `${DB_HOST}/${DB_NAME}`,
       });
 
       console.log("Successfully connected to Oracle Database");
@@ -185,7 +184,7 @@ async function handleMaterializedView() {
 }
 async function handleSimulation() {
   try {
-    if (DB_TYPE === "yugabyte") handleMaterializedView();
+    if (DB_TYPE === "yugabytedb") handleMaterializedView();
 
     if (!rentFilmInterval) {
       rentFilmInterval = setInterval(rentFilm, 1000);
