@@ -17,10 +17,10 @@ const {
 } = process.env;
 let oracledb;
 if (DB_TYPE === "oracle") {
-  // oracledb = require("oracledb");
-  // oracledb.initOracleClient({
-  //   libDir: process.env.HOME + "/instantclient_19_8",
-  // });
+  oracledb = require("oracledb");
+  oracledb.initOracleClient({
+    libDir: process.env.HOME + "/instantclient_19_8",
+  });
 }
 const QueryFactory = require("./QueryFactory");
 
