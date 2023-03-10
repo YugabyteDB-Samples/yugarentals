@@ -21,5 +21,5 @@ Oracle Database is not supported on machines running Apple ARM. To install the O
 
 - Install [Rosetta](https://support.apple.com/en-us/HT211861).
 - Use Rosetta to install dependencies, following [these steps](https://developers.ascendcorp.com/how-to-install-oracle-instant-client-on-apple-silicon-m1-24b67f2dc743).
-- Verify the developer, following [these steps](http://oraontap.blogspot.com/2020/01/mac-os-x-catalina-and-oracle-instant.html).
+  - Verify the developer, following [these steps](http://oraontap.blogspot.com/2020/01/mac-os-x-catalina-and-oracle-instant.html).
 - Install Node v16 inside terminal running Rosetta.
