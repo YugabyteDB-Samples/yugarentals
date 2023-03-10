@@ -12,8 +12,8 @@ The application can be started in several environments. Each deployment option c
 
 | Deployment Type                                     | Description                                                                                          |
 | --------------------------------------------------- | :--------------------------------------------------------------------------------------------------- |
-| [Dockerized Deployment](local_deployment_docker.md) | Deploy the entire app with all the components (React.js, Node.js, YugabyteDB) on your local machine. |
-| [Manual Installation](local_deployment.md)          | Deploy the application manually on your local machine.                                               |
+| [Dockerized Deployment with YugabyteDB](local_deployment_docker.md) | Deploy the entire app with all the components (React.js, Node.js, YugabyteDB) on your local machine. |
+| [Manual Installation with YugabyteDB or Oracle](local_deployment.md)          | Deploy the application manually on your local machine.                                               |
 
 ## Troubleshooting
 
