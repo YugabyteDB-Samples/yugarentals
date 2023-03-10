@@ -7,7 +7,10 @@ then
     echo $schemaInitialized
     if [[ $schemaInitialized == "0" ]];
     then
-        echo "this is where sql initialization goes down"
+        echo "Initializing Schema"
+        psql -h host.docker.internal -p 5433 -U yugabyte -a -f ./sql_scripts/yugabyte/schema.sql
+        echo "Seeding Data"
+        psql -h host.docker.internal -p 5433 -U yugabyte -a -f ./sql_scripts/yugabyte/data.sql
     fi
 fi
 

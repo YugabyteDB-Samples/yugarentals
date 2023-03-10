@@ -17,10 +17,10 @@ const {
 } = process.env;
 let oracledb;
 if (DB_TYPE === "oracle") {
-  oracledb = require("oracledb");
-  oracledb.initOracleClient({
-    libDir: process.env.HOME + "/instantclient_19_8",
-  });
+  // oracledb = require("oracledb");
+  // oracledb.initOracleClient({
+  //   libDir: process.env.HOME + "/instantclient_19_8",
+  // });
 }
 const QueryFactory = require("./QueryFactory");
 
@@ -60,13 +60,17 @@ async function run() {
         connectionTimeoutMillis: 5000,
       };
       //won't work in Docker
-      config["ssl"] = {
-        rejectUnauthorized: true,
-        ca: fs.readFileSync("./root.crt").toString(),
-        servername: DB_HOST,
-      };
+      if (process.env.DB_DEPLOYMENT_TYPE === "docker") {
+        connection = new Pool(config);
+      } else {
+        config["ssl"] = {
+          rejectUnauthorized: true,
+          ca: fs.readFileSync("./root.crt").toString(),
+          servername: DB_HOST,
+        };
 
-      connection = new Pool(config);
+        connection = new Pool(config);
+      }
       connection.on("connect", (c) => {
         c.query("SET search_path to admin");
       });
