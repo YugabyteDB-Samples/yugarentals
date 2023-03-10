@@ -13,6 +13,7 @@ const {
   DB_USER,
   DB_PASSWORD,
   DB_NAME,
+  DB_SSL_MODE,
   ORACLE_CLIENT_LIB_PATH,
 } = process.env;
 let oracledb;
@@ -29,7 +30,7 @@ let connection;
 const status = {
   simulating: false,
 };
-function executeQuery(query, dbType = "yugabyte", options, queryArgs) {
+function executeQuery(query, dbType = "yugabytedb", options, queryArgs) {
   if (dbType === "oracle") {
     console.log("execute query for oracle");
     return connection.execute(query, (queryArgs = []), (options = {}));
@@ -63,11 +64,17 @@ async function run() {
       if (process.env.DB_DEPLOYMENT_TYPE === "docker") {
         connection = new Pool(config);
       } else {
-        config["ssl"] = {
-          rejectUnauthorized: true,
-          ca: fs.readFileSync("./root.crt").toString(),
-          servername: DB_HOST,
-        };
+        if (DB_SSL_MODE === "true") {
+          config["ssl"] = {
+            rejectUnauthorized: true,
+            ca: fs.readFileSync("./root.crt").toString(),
+            servername: DB_HOST,
+          };
+        } else {
+          config["ssl"] = {
+            rejectUnauthorized: false,
+          };
+        }
 
         connection = new Pool(config);
       }
