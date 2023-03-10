@@ -23,8 +23,9 @@ services:
       - 8000:8000
     environment:
       - DB_DEPLOYMENT_TYPE=remote
-      - DB_TYPE=yugabyte
+      - DB_TYPE=yugabytedb
       - DB_HOST=[YUGABYTEDB_HOST]
       - DB_PASSWORD=[YUGABYTEDB_MANAGED_PASSWORD]
       - DB_NAME=yugabyte
       - DB_USER=admin
+      - DB_SSL_MODE=true

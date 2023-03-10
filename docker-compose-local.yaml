@@ -23,7 +23,7 @@ services:
     ports:
       - 8000:8000
     environment:
-      - DB_TYPE=yugabyte
+      - DB_TYPE=yugabytedb
       - DB_DEPLOYMENT_TYPE=docker
       - DB_HOST=host.docker.internal
       - DB_PASSWORD=yugabyte

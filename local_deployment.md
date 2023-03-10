@@ -71,11 +71,12 @@ Update the environment variables in `/server/.env` to match your deployment.
 ```
 # YugabyteDB Environment
 
-DB_TYPE=yugabyte
+DB_TYPE=yugabytedb
 DB_USER=admin
 DB_HOST=my-yugabytedb-managed-host
 DB_PASSWORD=password
 DB_NAME=yugabyte
+DB_SSL_MODE=true
 ```
 
 If running on YugabyteDB Managed, provide the downloaded root certificate in the `/server` directory as `root.crt`.
@@ -118,8 +119,9 @@ Update the environment variables in `/server/.env` to match your deployment.
 
 DB_TYPE=oracle
 DB_USER=admin
+DB_HOST=mymachine.example.com
 DB_PASSWORD=admin123
-DB_CONNECTION_STRING=mymachine.example.com/ORCL
+DB_NAME=ORCL
 DB_CLIENT_PATH=/path/to/oracleinstantclient
 ```
 
