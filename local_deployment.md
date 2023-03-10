@@ -86,7 +86,7 @@ To enable auto-reload on file changes in developement using [Nodemon](https://ww
 > ysqlsh -h 127.0.0.1 -p 5433 -U yugabyte -f sql_scripts/schema.sql
 > ysqlsh -h 127.0.0.1 -p 5433 -U yugabyte -f sql_scripts/data.sql
 
-#SQL*Plus
+# SQL
 > SQL > @/full/path/to/sql_scripts/oracle/schema.sql
 > SQL > @/full/path/to/sql_scripts/oracle/data.sql
 ```
