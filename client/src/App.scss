@@ -35,7 +35,10 @@
 
         .table-wrapper {
             h3 {
-                margin: 10px 20px 0px
+                margin: 10px 20px 0px;
+                span {
+                    margin-left: 5px;
+                }
             }
         }
     }

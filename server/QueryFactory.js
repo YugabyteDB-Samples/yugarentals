@@ -24,6 +24,5 @@ module.exports = {
     getSalesByFilmCategory: `select * from sales_by_film_category ORDER BY category asc`,
     createRental: `INSERT INTO rental (rental_date, inventory_id, customer_id, return_date, staff_id) VALUES ($1,$2,$3,$4,$5) returning rental_id`,
     createPayment: `INSERT INTO payment (customer_id, staff_id, rental_id, amount, payment_date) VALUES ($1,$2,$3,$4,$5)`,
-    refreshSalesByFilmCategory: `REFRESH MATERIALIZED VIEW sales_by_film_category`,
   },
 };

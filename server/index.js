@@ -167,32 +167,9 @@ App.get("/status", async (req, res) => {
   }
 });
 
-let materializedViewInterval = null;
 let rentFilmInterval = null;
-let materializedViewUpdated = true;
-async function handleMaterializedView() {
-  if (!materializedViewInterval) {
-    materializedViewInterval = setInterval(async function () {
-      if (materializedViewUpdated) {
-        console.log("Refreshing Materialized View In Interval");
-        materializedViewUpdated = false;
-        await executeQuery(QueryFactory.yugabyte.refreshSalesByFilmCategory);
-        materializedViewUpdated = true;
-      }
-    }, 5000);
-
-    if (materializedViewUpdated) {
-      console.log("Refreshing Materialized View");
-      materializedViewUpdated = false;
-      await executeQuery(QueryFactory.yugabyte.refreshSalesByFilmCategory);
-      materializedViewUpdated = true;
-    }
-  }
-}
 async function handleSimulation() {
   try {
-    if (DB_TYPE === "yugabytedb") handleMaterializedView();
-
     if (!rentFilmInterval) {
       rentFilmInterval = setInterval(rentFilm, 1000);
     }
@@ -207,9 +184,6 @@ App.post("/refresh", async (req, res) => {
     if (status["simulating"]) {
       handleSimulation();
     } else {
-      console.log("Clearing interval for Materialized View");
-      clearInterval(materializedViewInterval);
-      materializedViewInterval = null;
       clearInterval(rentFilmInterval);
       rentFilmInterval = null;
     }

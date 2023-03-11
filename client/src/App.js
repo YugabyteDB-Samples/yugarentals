@@ -35,9 +35,9 @@ function App() {
     const data = await json?.simulating;
     updateIsSimulating(data);
   }
-  const [salesByFilmCategory, updateSalesByFilmCategory] = useState();
-  const [recentRentals, updateRecentRentals] = useState();
-  const [loading, updateLoading] = useState(false);
+  const [salesByFilmCategory, setSalesByFilmCategory] = useState();
+  const [isViewLoading, setIsViewLoading] = useState(false);
+  const [recentRentals, setRecentRentals] = useState();
   const [isSimulating, updateIsSimulating] = useState(false);
   const [dataUpdateTimer, setDataUpdateTimer] = useState();
   let savedCallback = useRef(function () {
@@ -68,15 +68,18 @@ function App() {
   }, [isSimulating]);
 
   useEffect(() => {
-    console.log("inside effect");
     async function getSalesByFilmCategory() {
       try {
-        const salesByFilmCategory = await getData("/salesByFilmCategory");
-        const json = await salesByFilmCategory.json();
-        console.log(json);
-        const data = json?.data;
-        console.log(data);
-        updateSalesByFilmCategory(data);
+        if (!isViewLoading) {
+          setIsViewLoading(true);
+          const salesByFilmCategory = await getData("/salesByFilmCategory");
+          const json = await salesByFilmCategory.json();
+          console.log(json);
+          const data = json?.data;
+          console.log(data);
+          setSalesByFilmCategory(data);
+          setIsViewLoading(false);
+        }
       } catch (e) {
         console.log(`Error in fetching /salesByFilmCategory: ${e}`);
       }
@@ -89,7 +92,7 @@ function App() {
         console.log(json);
         const data = json?.data;
         console.log(data);
-        updateRecentRentals(data);
+        setRecentRentals(data);
       } catch (e) {
         console.log(`Error in fetching /recentRentals: ${e}`);
       }
@@ -140,7 +143,14 @@ function App() {
           ></Table>
         </div>
         <div className="table-wrapper">
-          <h3>Sales by Category</h3>
+          <h3>
+            Sales by Category{" "}
+            <span>
+              {isViewLoading && !salesByFilmCategory && (
+                <CircularProgress size={20} />
+              )}
+            </span>
+          </h3>
           <Table
             columns={["Film Category", "Total Sales"]}
             rows={salesByFilmCategory}

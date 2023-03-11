@@ -564,7 +564,7 @@ ALTER TABLE payment
 -- Name: sales_by_film_category; Type: VIEW; Schema: admin; Owner: postgres
 --
 
-CREATE MATERIALIZED VIEW sales_by_film_category (category, total_sales) AS SELECT
+CREATE VIEW sales_by_film_category (category, total_sales) AS SELECT
 c.name AS category
 , SUM(p.amount) AS total_sales 
 FROM payment p
