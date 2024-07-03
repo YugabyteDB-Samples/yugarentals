@@ -17,21 +17,18 @@ http://www.etl-tools.com
 --DROP TABLE actor;
 
 CREATE TABLE actor (
-  actor_id numeric NOT NULL ,
+  actor_id INT NOT NULL ,
   first_name VARCHAR(45) NOT NULL,
   last_name VARCHAR(45) NOT NULL,
   last_update DATE NOT NULL,
-  PRIMARY KEY  (actor_id)
-  );
+  CONSTRAINT pk_actor PRIMARY KEY  (actor_id)
+);
 
 CREATE  INDEX idx_actor_last_name ON actor(last_name);
-/
  
-  --DROP SEQUENCE actor_sequence;
+--DROP SEQUENCE actor_sequence;
 
 CREATE SEQUENCE actor_sequence;
-/
-
 
 
 CREATE OR REPLACE TRIGGER actor_before_trigger 
@@ -45,6 +42,7 @@ BEGIN
 END;
 /
 
+
 CREATE OR REPLACE TRIGGER actor_before_update
 BEFORE UPDATE ON actor FOR EACH ROW 
 BEGIN
@@ -53,21 +51,22 @@ END;
 /
 
 
+
 --
 -- Table structure for table country
 --
 
 CREATE TABLE country (
-  country_id SMALLINT NOT NULL,
+  country_id INT NOT NULL,
   country VARCHAR(50) NOT NULL,
   last_update DATE,
-  PRIMARY KEY  (country_id)
+  CONSTRAINT pk_country PRIMARY KEY (country_id)
 );
 
 ---DROP SEQUENCE country_sequence;
 
 CREATE SEQUENCE country_sequence;
-/
+
 
 
 CREATE OR REPLACE TRIGGER country_before_trigger
@@ -81,6 +80,7 @@ BEGIN
 END;
 /
 
+
 CREATE OR REPLACE TRIGGER country_before_update
 BEFORE UPDATE ON country FOR EACH ROW 
 BEGIN
@@ -89,26 +89,27 @@ END;
 /
 
 
+
 --
 -- Table structure for table city
 --
 
 CREATE TABLE city (
-  city_id int NOT NULL,
+  city_id INT NOT NULL,
   city VARCHAR(50) NOT NULL,
-  country_id SMALLINT NOT NULL,
+  country_id INT NOT NULL,
   last_update DATE NOT NULL,
-  PRIMARY KEY  (city_id),
+  CONSTRAINT pk_city PRIMARY KEY (city_id),
   CONSTRAINT fk_city_country FOREIGN KEY (country_id) REFERENCES country (country_id)
 );
 
 CREATE  INDEX idx_fk_country_id ON city(country_id);
-/
+
 
 --- DROP SEQUENCE city_sequence;
 
 CREATE SEQUENCE city_sequence;
-/
+
 
 CREATE OR REPLACE TRIGGER city_before_trigger
 BEFORE INSERT ON city FOR EACH ROW 
@@ -121,6 +122,7 @@ BEGIN
 END;
 /
 
+
 CREATE OR REPLACE TRIGGER city_before_update
 BEFORE UPDATE ON city FOR EACH ROW 
 BEGIN
@@ -129,12 +131,13 @@ END;
 /
 
 
+
 --
 -- Table structure for table address
 --
 
 CREATE TABLE address (
-  address_id int NOT NULL,
+  address_id INT NOT NULL,
   address VARCHAR(50) NOT NULL,
   address2 VARCHAR(50) DEFAULT NULL,
   district VARCHAR(20) NOT NULL,
@@ -142,19 +145,19 @@ CREATE TABLE address (
   postal_code VARCHAR(10) DEFAULT NULL,
   phone VARCHAR(20) NOT NULL,
   last_update DATE NOT NULL,
-  PRIMARY KEY  (address_id)
+  CONSTRAINT pk_address PRIMARY KEY (address_id)
 );
 
 CREATE  INDEX idx_fk_city_id ON address(city_id);
-/
+
 
 ALTER TABLE address ADD  CONSTRAINT fk_address_city FOREIGN KEY (city_id) REFERENCES city (city_id);
-/
+
 
   --DROP SEQUENCE city_sequence;
 
 CREATE SEQUENCE address_sequence;
-/
+
 
 CREATE OR REPLACE TRIGGER address_before_trigger
 BEFORE INSERT ON address FOR EACH ROW 
@@ -166,6 +169,7 @@ BEGIN
  :NEW.last_update:=current_date;
 END;
 /
+
 
 CREATE OR REPLACE TRIGGER address_before_update
 BEFORE UPDATE ON address FOR EACH ROW 
@@ -179,16 +183,16 @@ END;
 --
 
 CREATE TABLE language (
-  language_id SMALLINT NOT NULL ,
+  language_id INT NOT NULL ,
   name CHAR(20) NOT NULL,
   last_update DATE NOT NULL,
-  PRIMARY KEY (language_id)
+  CONSTRAINT pk_language PRIMARY KEY (language_id)
 );
 
 ---DROP SEQUENCE language_sequence;
 
 CREATE SEQUENCE language_sequence;
-/
+
 
 CREATE OR REPLACE TRIGGER language_before_trigger
 BEFORE INSERT ON language FOR EACH ROW 
@@ -201,6 +205,7 @@ BEGIN
 END;
 /
 
+
 CREATE OR REPLACE TRIGGER language_before_update
 BEFORE UPDATE ON language FOR EACH ROW 
 BEGIN
@@ -208,21 +213,22 @@ BEGIN
 END;
 /
 
+
 --
 -- Table structure for table category
 --
 
 CREATE TABLE category (
-  category_id SMALLINT NOT NULL,
+  category_id INT NOT NULL,
   name VARCHAR(25) NOT NULL,
   last_update DATE NOT NULL,
-  PRIMARY KEY  (category_id)
+  CONSTRAINT pk_category PRIMARY KEY  (category_id)
 );
 
 ---DROP SEQUENCE category_sequence;
 
 CREATE SEQUENCE category_sequence;
-/
+
 
 CREATE OR REPLACE TRIGGER category_before_trigger
 BEFORE INSERT ON category FOR EACH ROW 
@@ -234,6 +240,7 @@ BEGIN
   :NEW.last_update:=current_date;
 END;
 /
+
 
 CREATE OR REPLACE TRIGGER category_before_update
 BEFORE UPDATE ON category FOR EACH ROW 
@@ -256,20 +263,20 @@ CREATE TABLE customer (
   active CHAR(1) DEFAULT 'Y' NOT NULL,
   create_date DATE NOT NULL,
   last_update DATE NOT NULL,
-  PRIMARY KEY  (customer_id),
+  CONSTRAINT pk_customer PRIMARY KEY  (customer_id),
   CONSTRAINT fk_customer_address FOREIGN KEY (address_id) REFERENCES address(address_id)
 );
 
 CREATE  INDEX idx_customer_fk_store_id ON customer(store_id);
-/
+
 CREATE  INDEX idx_customer_fk_address_id ON customer(address_id);
-/
+
 CREATE  INDEX idx_customer_last_name ON customer(last_name);
-/
+
 ---DROP SEQUENCE customer_sequence;
 
 CREATE SEQUENCE customer_sequence;
-/
+
 
 CREATE OR REPLACE TRIGGER customer_before_trigger
 BEFORE INSERT ON customer FOR EACH ROW 
@@ -282,23 +289,25 @@ BEGIN
   :NEW.create_date:=current_date;
 END;
 /
+
 CREATE OR REPLACE TRIGGER customer_before_update
 BEFORE UPDATE ON customer FOR EACH ROW 
 BEGIN
   :NEW.last_update:=current_date;
 END;
 /
+
 --
 -- Table structure for table film
 --
 
 CREATE TABLE film (
-  film_id int NOT NULL,
+  film_id INT NOT NULL,
   title VARCHAR(255) NOT NULL,
   description CLOB DEFAULT NULL,
   release_year VARCHAR(4) DEFAULT NULL,
-  language_id SMALLINT NOT NULL,
-  original_language_id SMALLINT DEFAULT NULL,
+  language_id INT NOT NULL,
+  original_language_id INT DEFAULT NULL,
   rental_duration SMALLINT  DEFAULT 3 NOT NULL,
   rental_rate DECIMAL(4,2) DEFAULT 4.99 NOT NULL,
   length SMALLINT DEFAULT NULL,
@@ -306,7 +315,7 @@ CREATE TABLE film (
   rating VARCHAR(10) DEFAULT 'G',
   special_features VARCHAR(100) DEFAULT NULL,
   last_update DATE NOT NULL,
-  PRIMARY KEY  (film_id),
+  CONSTRAINT pk_film PRIMARY KEY  (film_id),
   CONSTRAINT fk_film_language FOREIGN KEY (language_id) REFERENCES language (language_id) ,
   CONSTRAINT fk_film_language_original FOREIGN KEY (original_language_id) REFERENCES language (language_id)
 );
@@ -316,18 +325,18 @@ ALTER TABLE film ADD CONSTRAINT CHECK_special_features CHECK(special_features is
                                                               special_features like '%Commentaries%' or
                                                               special_features like '%Deleted Scenes%' or
                                                               special_features like '%Behind the Scenes%');
-/
+
 ALTER TABLE film ADD CONSTRAINT CHECK_special_rating CHECK(rating in ('G','PG','PG-13','R','NC-17'));
-/
+
 CREATE  INDEX idx_fk_language_id ON film(language_id);
-/
+
 CREATE  INDEX idx_fk_original_language_id ON film(original_language_id);
-/
+
 
 ---DROP SEQUENCE film_sequence;
 
 CREATE SEQUENCE film_sequence;
-/
+
 
 CREATE OR REPLACE TRIGGER film_before_trigger
 BEFORE INSERT ON film FOR EACH ROW 
@@ -340,12 +349,14 @@ BEGIN
 END;
 /
 
+
 CREATE OR REPLACE TRIGGER film_before_update
 BEFORE UPDATE ON film FOR EACH ROW 
 BEGIN
   :NEW.last_update:=current_date;
 END;
 /
+
 
 --
 -- Table structure for table film_actor
@@ -355,16 +366,16 @@ CREATE TABLE film_actor (
   actor_id INT NOT NULL,
   film_id  INT NOT NULL,
   last_update DATE NOT NULL,
-  PRIMARY KEY  (actor_id,film_id),
+  CONSTRAINT pk_film_actor PRIMARY KEY  (actor_id,film_id),
   CONSTRAINT fk_film_actor_actor FOREIGN KEY (actor_id) REFERENCES actor (actor_id),
   CONSTRAINT fk_film_actor_film FOREIGN KEY (film_id) REFERENCES film (film_id)
 );
 
 CREATE  INDEX idx_fk_film_actor_film ON film_actor(film_id);
-/
+
 
 CREATE  INDEX idx_fk_film_actor_actor ON film_actor(actor_id) ;
-/
+
 
 CREATE OR REPLACE TRIGGER film_actor_before_trigger
 BEFORE INSERT ON film_actor FOR EACH ROW 
@@ -373,6 +384,7 @@ BEGIN
 END;
 /
 
+
 CREATE OR REPLACE TRIGGER film_actor_before_update
 BEFORE UPDATE ON film_actor FOR EACH ROW 
 BEGIN
@@ -380,23 +392,24 @@ BEGIN
 END;
 /
 
+
 --
 -- Table structure for table film_category
 --
 
 CREATE TABLE film_category (
   film_id INT NOT NULL,
-  category_id SMALLINT  NOT NULL,
+  category_id INT  NOT NULL,
   last_update DATE NOT NULL,
-  PRIMARY KEY (film_id, category_id),
+  CONSTRAINT pk_film_category PRIMARY KEY (film_id, category_id),
   CONSTRAINT fk_film_category_film FOREIGN KEY (film_id) REFERENCES film (film_id),
   CONSTRAINT fk_film_category_category FOREIGN KEY (category_id) REFERENCES category (category_id)
 );
 
 CREATE  INDEX idx_fk_film_category_film ON film_category(film_id);
-/
+
 CREATE  INDEX idx_fk_film_category_category ON film_category(category_id);
-/
+
 
 CREATE OR REPLACE TRIGGER film_category_before_trigger
 BEFORE INSERT ON film_category FOR EACH ROW 
@@ -405,21 +418,23 @@ BEGIN
 END;
 /
 
+
 CREATE OR REPLACE TRIGGER film_category_before_update
 BEFORE UPDATE ON film_category FOR EACH ROW 
 BEGIN
   :NEW.last_update:=current_date;
 END;
 /
+
 --
 -- Table structure for table film_text
 --
 
 CREATE TABLE film_text (
-  film_id SMALLINT NOT NULL,
+  film_id INT NOT NULL,
   title VARCHAR(255) NOT NULL,
   description CLOB,
-  PRIMARY KEY  (film_id)
+  CONSTRAINT pk_film_text PRIMARY KEY  (film_id)
 );
 
 --
@@ -431,20 +446,20 @@ CREATE TABLE inventory (
   film_id INT NOT NULL,
   store_id INT NOT NULL,
   last_update DATE NOT NULL,
-  PRIMARY KEY  (inventory_id),
+  CONSTRAINT pk_inventory PRIMARY KEY  (inventory_id),
   CONSTRAINT fk_inventory_film FOREIGN KEY (film_id) REFERENCES film (film_id)
 );
 
 CREATE  INDEX idx_fk_film_id ON inventory(film_id);
-/
+
 
 CREATE  INDEX idx_fk_film_id_store_id ON inventory(store_id,film_id);
-/
+
 
 ---DROP SEQUENCE inventory_sequence;
 
 CREATE SEQUENCE inventory_sequence;
-/
+
 
 CREATE OR REPLACE TRIGGER inventory_before_trigger
 BEFORE INSERT ON inventory FOR EACH ROW 
@@ -456,6 +471,7 @@ BEGIN
   :NEW.last_update:=current_date;
 END;
 /
+
 CREATE OR REPLACE TRIGGER inventory_before_update
 BEFORE UPDATE ON inventory FOR EACH ROW 
 BEGIN
@@ -468,7 +484,7 @@ END;
 --
 
 CREATE TABLE staff (
-  staff_id SMALLINT NOT NULL,
+  staff_id INT NOT NULL,
   first_name VARCHAR(45) NOT NULL,
   last_name VARCHAR(45) NOT NULL,
   address_id INT NOT NULL,
@@ -479,20 +495,20 @@ CREATE TABLE staff (
   username VARCHAR(16) NOT NULL,
   password VARCHAR(40) DEFAULT NULL,
   last_update DATE NOT NULL,
-  PRIMARY KEY  (staff_id),
+  CONSTRAINT pk_staff PRIMARY KEY  (staff_id),
   CONSTRAINT fk_staff_address FOREIGN KEY (address_id) REFERENCES address (address_id)
 );
 
 CREATE  INDEX idx_fk_staff_store_id ON staff(store_id);
-/
+
 
 CREATE  INDEX idx_fk_staff_address_id ON staff(address_id);
-/
+
 
 ---DROP SEQUENCE inventory_sequence;
 
 CREATE SEQUENCE staff_sequence;
-/
+
 
 CREATE OR REPLACE TRIGGER staff_before_trigger
 BEFORE INSERT ON staff FOR EACH ROW 
@@ -504,6 +520,7 @@ BEGIN
   :NEW.last_update:=current_date;
 END;
 /
+
 
 CREATE OR REPLACE TRIGGER staff_before_update
 BEFORE UPDATE ON staff FOR EACH ROW 
@@ -518,24 +535,24 @@ END;
 
 CREATE TABLE store (
   store_id INT NOT NULL,
-  manager_staff_id SMALLINT NOT NULL,
+  manager_staff_id INT NOT NULL,
   address_id INT NOT NULL,
   last_update DATE NOT NULL,
-  PRIMARY KEY  (store_id),
+  CONSTRAINT pk_store PRIMARY KEY  (store_id),
   CONSTRAINT fk_store_staff FOREIGN KEY (manager_staff_id) REFERENCES staff (staff_id) ,
   CONSTRAINT fk_store_address FOREIGN KEY (address_id) REFERENCES address (address_id)
 );
 
 CREATE  INDEX idx_store_fk_manager_staff_id ON store(manager_staff_id);
-/
+
 
 CREATE  INDEX idx_fk_store_address ON store(address_id);
-/
+
 
 ---DROP SEQUENCE store_sequence;
 
 CREATE SEQUENCE store_sequence;
-/
+
 
 
 
@@ -562,27 +579,27 @@ END;
 --
 
 CREATE TABLE payment (
-  payment_id int NOT NULL,
+  payment_id INT NOT NULL,
   customer_id INT  NOT NULL,
-  staff_id SMALLINT NOT NULL,
+  staff_id INT NOT NULL,
   rental_id INT DEFAULT NULL,
   amount DECIMAL(5,2) NOT NULL,
   payment_date DATE NOT NULL,
   last_update DATE NOT NULL,
-  PRIMARY KEY  (payment_id),
+  CONSTRAINT pk_payment PRIMARY KEY  (payment_id),
   CONSTRAINT fk_payment_customer FOREIGN KEY (customer_id) REFERENCES customer (customer_id) ,
   CONSTRAINT fk_payment_staff FOREIGN KEY (staff_id) REFERENCES staff (staff_id)
 );
 
 CREATE  INDEX idx_fk_staff_id ON payment(staff_id);
-/
+
 CREATE  INDEX idx_fk_customer_id ON payment(customer_id);
-/
+
 
 ---DROP SEQUENCE payment_sequence;
 
 CREATE SEQUENCE payment_sequence;
-/
+
 
 CREATE OR REPLACE TRIGGER payment_before_trigger
 BEFORE INSERT ON payment FOR EACH ROW 
@@ -608,27 +625,27 @@ CREATE TABLE rental (
   inventory_id INT  NOT NULL,
   customer_id INT  NOT NULL,
   return_date DATE DEFAULT NULL,
-  staff_id SMALLINT  NOT NULL,
+  staff_id INT  NOT NULL,
   last_update DATE NOT NULL,
-  PRIMARY KEY (rental_id),
+  CONSTRAINT pk_rental PRIMARY KEY (rental_id),
   CONSTRAINT fk_rental_staff FOREIGN KEY (staff_id) REFERENCES staff (staff_id) ,
   CONSTRAINT fk_rental_inventory FOREIGN KEY (inventory_id) REFERENCES inventory (inventory_id) ,
   CONSTRAINT fk_rental_customer FOREIGN KEY (customer_id) REFERENCES customer (customer_id)
 );
 
 CREATE INDEX idx_rental_fk_inventory_id ON rental(inventory_id);
-/
+
 CREATE INDEX idx_rental_fk_customer_id ON rental(customer_id);
-/
+
 CREATE INDEX idx_rental_fk_staff_id ON rental(staff_id);
-/
+
 CREATE UNIQUE INDEX   idx_rental_uq  ON rental (rental_date,inventory_id,customer_id);
-/
+
 
 ---DROP SEQUENCE payment_sequence;
 
 CREATE SEQUENCE rental_sequence;
-/
+
 
 CREATE OR REPLACE TRIGGER rental_before_trigger
 BEFORE INSERT ON rental FOR EACH ROW 
@@ -650,13 +667,13 @@ END;
 
 -- FK CONSTRAINTS
 ALTER TABLE customer ADD CONSTRAINT fk_customer_store FOREIGN KEY (store_id) REFERENCES store (store_id);
-/
+
 ALTER TABLE inventory ADD CONSTRAINT fk_inventory_store FOREIGN KEY (store_id) REFERENCES store (store_id);
-/
+
 ALTER TABLE staff ADD CONSTRAINT fk_staff_store FOREIGN KEY (store_id) REFERENCES store (store_id);
-/
+
 ALTER TABLE payment ADD CONSTRAINT fk_payment_rental FOREIGN KEY (rental_id) REFERENCES rental (rental_id) ON DELETE SET NULL;
-/
+
 --
 -- View structure for view customer_list
 --
@@ -674,7 +691,7 @@ SELECT cu.customer_id AS ID,
        cu.store_id AS SID
 FROM customer cu JOIN address a ON cu.address_id = a.address_id JOIN city ON a.city_id = city.city_id
     JOIN country ON city.country_id = country.country_id;
-/
+
 --
 -- View structure for view film_list
 --
@@ -688,11 +705,11 @@ SELECT film.film_id AS FID,
        film.rental_rate AS price,
        film.length AS length,
        film.rating AS rating,
-       actor.first_name1||' '||actor.last_name AS actors
+       actor.first_name||' '||actor.last_name AS actors
 FROM category LEFT JOIN film_category ON category.category_id = film_category.category_id LEFT JOIN film ON film_category.film_id = film.film_id
         JOIN film_actor ON film.film_id = film_actor.film_id
     JOIN actor ON film_actor.actor_id = actor.actor_id;
-/
+
 
 --
 -- View structure for view staff_list
@@ -710,7 +727,7 @@ SELECT s.staff_id AS ID,
        s.store_id AS SID
 FROM staff s JOIN address a ON s.address_id = a.address_id JOIN city ON a.city_id = city.city_id
     JOIN country ON city.country_id = country.country_id;
-/
+
 --
 -- View structure for view sales_by_store
 --
@@ -734,7 +751,7 @@ GROUP BY
   s.store_id
 , c.city||','||cy.country
 , m.first_name||' '||m.last_name;
-/
+
 --
 -- View structure for view sales_by_film_category
 --
@@ -754,7 +771,7 @@ INNER JOIN film f ON i.film_id = f.film_id
 INNER JOIN film_category fc ON f.film_id = fc.film_id
 INNER JOIN category c ON fc.category_id = c.category_id
 GROUP BY c.name;
-/
+
 
 --
 -- View structure for view actor_info
